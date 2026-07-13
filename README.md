@@ -13,7 +13,6 @@ DevTimer is a Kotlin desktop application for tracking focused coding sessions an
 - Show information about the latest completed session
 - Filter statistics by month and year
 - Visualize daily project activity with a column chart
-- Run automated unit and database integration tests in GitHub Actions
 
 ## Tech Stack
 
