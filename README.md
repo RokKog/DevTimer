@@ -1,7 +1,5 @@
 # DevTimer – Developer Productivity Tracker
 
-[![CI](https://github.com/RokKog/devtimer-desktop/actions/workflows/ci.yml/badge.svg)](https://github.com/RokKog/devtimer-desktop/actions/workflows/ci.yml)
-
 DevTimer is a Kotlin desktop application for tracking focused coding sessions and visualizing project activity. It monitors Kotlin source files in a selected project directory, stores completed sessions locally, and presents monthly code-change statistics.
 
 ## Features
