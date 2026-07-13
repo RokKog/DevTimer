@@ -1,0 +1,65 @@
+CREATE TABLE session (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL,
+    start_time INTEGER NOT NULL,
+    end_time INTEGER NOT NULL,
+    duration_seconds INTEGER NOT NULL,
+    start_line_count INTEGER NOT NULL,
+    end_line_count INTEGER NOT NULL,
+    added_lines INTEGER NOT NULL,
+    removed_lines INTEGER NOT NULL,
+    changed_lines INTEGER NOT NULL,
+    FOREIGN KEY(project_id) REFERENCES project(id) ON DELETE CASCADE
+);
+
+insertSession:
+INSERT INTO session(
+    project_id,
+    start_time,
+    end_time,
+    duration_seconds,
+    start_line_count,
+    end_line_count,
+    added_lines,
+    removed_lines,
+    changed_lines
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getLastSession:
+SELECT
+    session.id,
+    session.project_id,
+    session.start_time,
+    session.end_time,
+    session.duration_seconds,
+    session.start_line_count,
+    session.end_line_count,
+    session.added_lines,
+    session.removed_lines,
+    session.changed_lines,
+    project.name AS project_name
+FROM session
+INNER JOIN project ON session.project_id = project.id
+ORDER BY session.end_time DESC
+LIMIT 1;
+
+getYears:
+SELECT DISTINCT CAST(strftime('%Y', datetime(start_time, 'unixepoch', 'localtime')) AS INTEGER)
+FROM session
+ORDER BY CAST(strftime('%Y', datetime(start_time, 'unixepoch', 'localtime')) AS INTEGER);
+
+getChangedLinesByDay:
+SELECT
+    CAST(strftime('%d', datetime(session.start_time, 'unixepoch', 'localtime')) AS INTEGER) AS day,
+    project.name AS project_name,
+    project.color AS color,
+    SUM(session.added_lines) AS added_lines,
+    SUM(session.removed_lines) AS removed_lines,
+    SUM(session.changed_lines) AS changed_lines
+FROM session
+INNER JOIN project ON session.project_id = project.id
+WHERE CAST(strftime('%m', datetime(session.start_time, 'unixepoch', 'localtime')) AS INTEGER) = :monthNumber
+AND CAST(strftime('%Y', datetime(session.start_time, 'unixepoch', 'localtime')) AS INTEGER) = :yearNumber
+GROUP BY day, project.id, project.name, project.color
+ORDER BY day ASC;

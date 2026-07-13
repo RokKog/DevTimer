@@ -1,0 +1,19 @@
+CREATE TABLE developer (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE
+);
+
+insertDeveloper:
+INSERT OR IGNORE INTO developer(name)
+VALUES (?);
+
+getDeveloperByName:
+SELECT *
+FROM developer
+WHERE name = ?
+LIMIT 1;
+
+getAllDevelopers:
+SELECT *
+FROM developer
+ORDER BY name;

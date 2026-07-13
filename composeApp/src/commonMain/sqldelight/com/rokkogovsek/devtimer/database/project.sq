@@ -1,0 +1,23 @@
+CREATE TABLE project (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    developer_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    directory_path TEXT NOT NULL UNIQUE,
+    color TEXT NOT NULL,
+    FOREIGN KEY(developer_id) REFERENCES developer(id) ON DELETE CASCADE
+);
+
+insertProject:
+INSERT OR IGNORE INTO project(developer_id, name, directory_path, color)
+VALUES (?, ?, ?, ?);
+
+getProjectByPath:
+SELECT *
+FROM project
+WHERE directory_path = ?
+LIMIT 1;
+
+getAllProjects:
+SELECT *
+FROM project
+ORDER BY name;
